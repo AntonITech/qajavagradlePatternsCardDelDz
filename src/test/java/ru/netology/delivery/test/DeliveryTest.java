@@ -30,14 +30,16 @@ class DeliveryTest {
         String firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
         int daysToAddForSecondMeeting = 7;
         String secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
-        $("[data-test-id=city] input").setValue(validUser.getCity());
+        $x("//span[@data-test-id='city']//input").setValue(validUser.getCity());
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] input").setValue(firstMeetingDate);
         $("[data-test-id=name] input").setValue(validUser.getName());
         $("[data-test-id=phone] input").setValue(validUser.getPhone());
         $x("//span[@class='checkbox__text']").click();
         $(byText("Запланировать")).click();
-        $(byText("Успешно!")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+
+        $x("//div[contains(text(), 'Успешно!')]").shouldBe(Condition.visible, Duration.ofSeconds(15));
+        //$(byText("Успешно!")).shouldBe(Condition.visible, Duration.ofSeconds(15));
         $("[data-test-id='success-notification'] .notification__content")
                 .shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate))
                 .shouldBe(Condition.visible);
@@ -49,7 +51,7 @@ class DeliveryTest {
                 .shouldBe(Condition.visible);
         $x("//span[contains(text(),'Перепланировать')]").click();
         //$("[data-test-id='replan-notification'] button").click();
-        $("data-test-id='success-notification'] .notification__content")
+        $x("//div[@data-test-id='success-notification']//div[@class='notification__content']")
                 .shouldHave(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate))
                 .shouldBe(Condition.visible);
     }
